@@ -12,29 +12,11 @@ const PORT = process.env.PORT || 8000
 const routes = require('./routes/api')
 
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/mern_youtube', {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/mern', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
 
-
-
-//Saving data to mongo database
-// const data = {
-//   title: 'Welcome',
-//   body: 'This is a test for a post content'
-// }
-
-// const newBlogPost = new BlogPost(data) //instance of the model
-
-//.save()
-// newBlogPost.save((error) => {
-//   if (error) {
-//     console.log("Something went")
-//   } else {
-//     console.log("Data has been saved")
-//   }
-// })
 
 
 mongoose.connection.on('connected', () => {
@@ -44,6 +26,11 @@ mongoose.connection.on('connected', () => {
 //Middleare to parse json data
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+
+//Deployment- constum variable for heruku
+if (process.env.Node_ENV === 'production') {
+  app.use(express.static('client/build'))
+}
 
 //HTTP request logger
 app.use(morgan('tiny'))
